@@ -101,7 +101,7 @@ func entry(entries map[string]interface{}, key string, value interface{}) map[st
 	case []interface{}:
 		values := make([]string, 0, len(value.([]interface{})))
 		for _, v := range value.([]interface{}) {
-			values = append(values, v.(string))
+			values = append(values, fmt.Sprintf("%v", v))
 		}
 		entries[key] = values
 	case interface{}:
