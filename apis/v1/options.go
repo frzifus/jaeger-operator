@@ -93,19 +93,19 @@ func (o *Options) parse(entries map[string]interface{}) {
 }
 
 func entry(entries map[string]interface{}, key string, value interface{}) map[string]interface{} {
-	switch value.(type) {
+	switch val := value.(type) {
 	case map[string]interface{}:
-		for k, v := range value.(map[string]interface{}) {
+		for k, v := range val {
 			entries = entry(entries, fmt.Sprintf("%s.%v", key, k), v)
 		}
 	case []interface{}:
-		values := make([]string, 0, len(value.([]interface{})))
-		for _, v := range value.([]interface{}) {
+		values := make([]string, 0, len(val))
+		for _, v := range val {
 			values = append(values, fmt.Sprintf("%v", v))
 		}
 		entries[key] = values
 	case interface{}:
-		entries[key] = fmt.Sprintf("%v", value)
+		entries[key] = fmt.Sprintf("%v", val)
 	}
 
 	return entries
