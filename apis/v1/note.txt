@@ -1,0 +1,3 @@
+DEBUG	controller-runtime.webhook.webhooks	received request	{"webhook": "/mutate-jaegertracing-io-v1-jaeger", "UID": "6c77a050-a28d-4172-abc4-56f61670baef", "kind": "jaegertracing.io/v1, Kind=Jaeger", "resource": {"group":"jaegertracing.io","version":"v1","resource":"jaegers"}}
+map[name:CASSANDRA_PASSWORD valueFrom:map[secretKeyRef:map[key:password name:cassandra-secret]]] map[string]interface {}
+DEBUG	controller-runtime.webhook.webhooks	wrote response	{"webhook": "/mutate-jaegertracing-io-v1-jaeger", "code": 400, "reason": "", "UID": "6c77a050-a28d-4172-abc4-56f61670baef", "allowed": false}

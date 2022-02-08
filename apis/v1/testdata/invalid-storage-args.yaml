@@ -1,0 +1,40 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaegertracer
+  namespace:
+spec:
+  strategy: production
+  sampling:
+    options:
+      default_strategy:
+        type: probabilistic
+        param: 0.5
+  storage:
+    type: cassandra
+    options:
+      cassandra:
+        servers: internal-a1-1179306.ap-southeast-1.elb.amazonaws.com
+        keyspace: tccc_jaeger
+        username: cassandra
+        env:
+        - name: CASSANDRA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: cassandra-secret
+        - name: TRACE_TTL
+          value: 2629800
+        - name: DEPENDENCIES_TTL
+          value: 2629800
+      cassandraCreateSchema:
+        enabled: false
+        datacenter: "dev"
+        mode: "test"
+  collector:
+    autoscale: false
+    maxReplicas: 1
+    resources:
+      limits:
+        cpu: 30m
+        memory: 128Mi
