@@ -42,10 +42,10 @@ func For(ctx context.Context, jaeger *v1.Jaeger) S {
 	}
 
 	if jaeger.Spec.Strategy == v1.DeploymentStrategyStreaming {
-		return newStreamingStrategy(ctx, jaeger)
+		return newStreamingStrategy(ctx, jaeger) // TODO: support imagepullsecret
 	}
 
-	return newProductionStrategy(ctx, jaeger)
+	return newProductionStrategy(ctx, jaeger) // TODO: support imagepullsecret
 }
 
 // normalize changes the incoming Jaeger object so that the defaults are applied when
