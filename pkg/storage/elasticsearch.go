@@ -122,11 +122,15 @@ func (ed *ElasticsearchDeployment) InjectStorageConfiguration(p *corev1.PodSpec)
 
 // InjectSecretsConfiguration changes the given spec to include the options for the index cleaner
 func (ed *ElasticsearchDeployment) InjectSecretsConfiguration(p *corev1.PodSpec) {
+	secretName := jaegerESSecretName(*ed.Jaeger)
+	if isESRollover(p.Containers...) {
+		secretName = curatorSecret.instanceName(ed.Jaeger)
+	}
 	p.Volumes = append(p.Volumes, corev1.Volume{
 		Name: volumeName,
 		VolumeSource: corev1.VolumeSource{
 			Secret: &corev1.SecretVolumeSource{
-				SecretName: curatorSecret.instanceName(ed.Jaeger),
+				SecretName: secretName,
 			},
 		},
 	})
@@ -259,4 +263,16 @@ func jaegerESSecretName(jaeger v1.Jaeger) string {
 		prefix = jaeger.Name + "-"
 	}
 	return fmt.Sprintf("%sjaeger-%s", prefix, jaeger.Spec.Storage.Elasticsearch.Name)
+}
+
+func isESRollover(container ...corev1.Container) bool {
+	if len(container) == 0 {
+		return false
+	}
+	for _, c := range container {
+		if strings.HasSuffix(c.Name, "es-rollover") {
+			return true
+		}
+	}
+	return false
 }
